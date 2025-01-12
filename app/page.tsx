@@ -10,15 +10,20 @@ export default function Home() {
   const [targetDate] = useState<Date>(defaultDate);
   const today = new Date();
 
-  const calculateTimeLeft = () => {
-    const days = differenceInDays(targetDate, today);
-    const weeks = differenceInWeeks(targetDate, today);
-    const hours = differenceInHours(targetDate, today);
+  // Subtract 90 days from the target date to get the resignation date
+  const resignationDate = new Date(targetDate);
+  resignationDate.setDate(resignationDate.getDate() - 90);
+
+  const calculateTimeLeft = (date: Date) => {
+    const days = differenceInDays(date, today);
+    const weeks = differenceInWeeks(date, today);
+    const hours = differenceInHours(date, today);
 
     return { days, weeks, hours };
   };
 
-  const timeLeft = calculateTimeLeft();
+  const timeLeftTechM = calculateTimeLeft(targetDate);
+  const timeLeftResign = calculateTimeLeft(resignationDate);
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-background to-muted p-4 sm:p-8">
@@ -26,6 +31,7 @@ export default function Home() {
         <h1 className="text-4xl font-bold tracking-tight">Time left in TechM</h1>
         <p className="text-muted-foreground">Counting down to September 21, 2025</p>
 
+        {/* Time Remaining to TechM */}
         <Card className="p-6">
           <div className="flex items-center gap-2 mb-4">
             <Clock className="h-5 w-5" />
@@ -34,18 +40,35 @@ export default function Home() {
           <p className="text-sm text-muted-foreground mb-6">
             Until {format(targetDate, "PPPP")}:
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="bg-primary/5 rounded-lg p-4 text-center">
-              <div className="text-3xl font-bold text-primary">{timeLeft.days}</div>
+          <div className="flex justify-between gap-4">
+            <div className="bg-primary/5 rounded-lg p-4 text-center w-1/2">
+              <div className="text-3xl font-bold text-primary">{timeLeftTechM.days}</div>
               <div className="text-sm text-muted-foreground">Days</div>
             </div>
-            <div className="bg-primary/5 rounded-lg p-4 text-center">
-              <div className="text-3xl font-bold text-primary">{timeLeft.weeks}</div>
+            <div className="bg-primary/5 rounded-lg p-4 text-center w-1/2">
+              <div className="text-3xl font-bold text-primary">{timeLeftTechM.weeks}</div>
               <div className="text-sm text-muted-foreground">Weeks</div>
             </div>
-            <div className="bg-primary/5 rounded-lg p-4 text-center">
-              <div className="text-3xl font-bold text-primary">{timeLeft.hours}</div>
-              <div className="text-sm text-muted-foreground">Hours</div>
+          </div>
+        </Card>
+
+        {/* Time Remaining to Resign */}
+        <Card className="p-6">
+          <div className="flex items-center gap-2 mb-4">
+            <Clock className="h-5 w-5" />
+            <h2 className="text-xl font-semibold">Time Remaining to Resign</h2>
+          </div>
+          <p className="text-sm text-muted-foreground mb-6">
+            Until {format(resignationDate, "PPPP")}:
+          </p>
+          <div className="flex justify-between gap-4">
+            <div className="bg-primary/5 rounded-lg p-4 text-center w-1/2">
+              <div className="text-3xl font-bold text-primary">{timeLeftResign.days}</div>
+              <div className="text-sm text-muted-foreground">Days</div>
+            </div>
+            <div className="bg-primary/5 rounded-lg p-4 text-center w-1/2">
+              <div className="text-3xl font-bold text-primary">{timeLeftResign.weeks}</div>
+              <div className="text-sm text-muted-foreground">Weeks</div>
             </div>
           </div>
         </Card>
